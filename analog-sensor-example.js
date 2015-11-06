@@ -24,9 +24,6 @@ conn.on('ready', function(data){
   console.log('UUID AUTHENTICATED!');
   console.log(data);
 
-  var accelVal, tempVal;
-
-
   var board = new five.Board({
     io: boardIO
   });
@@ -35,31 +32,19 @@ conn.on('ready', function(data){
   board.on("ready", function() {
     console.log("Bean Ready...");
 
-    boardIO.connectedBean.on("accell", function(x, y, z, valid){
-      accelVal = {"x": x, "y": y, "z": z};
+    var sensor = new five.Sensor("A0");
+
+    // When the sensor value changes, send the value
+    sensor.on("change", function() {
+      console.log(this.value);
+      var value = this.value;
       conn.message({
         "devices": "*",
         "payload": {
-          "accell": accelVal
+          "analogSensor": value
         }
       });
     });
-
-    boardIO.connectedBean.on("temp", function(temp, valid){
-      tempVal = temp;
-      conn.message({
-        "devices": "*",
-        "payload": {
-          "temp":   tempValc
-        }
-      });
-    });
-
-    setInterval(function(){
-      boardIO.connectedBean.requestAccell();
-      boardIO.connectedBean.requestTemp();
-    }, 1000);
-
   });
 
 });

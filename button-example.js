@@ -5,9 +5,10 @@ var boardIO = new beanio.Board({
 });
 
 var meshblu = require('meshblu');
+var meshbluJSON = require('./meshblu.json');
 
-var uuid    = "";
-var token   = "";
+var uuid    = meshbluJSON.uuid;
+var token   = meshbluJSON.token;
 
 var conn = meshblu.createConnection({
   "uuid": uuid,
